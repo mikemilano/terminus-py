@@ -1,8 +1,11 @@
-Pantheon Terminus Python Library
-================================
+Pytheon
+=======
 
-This is largely a work in progress, but here is
-an example of how it currently works.
+This is a Python wrapper around the JSON API Pantheon exposes.
+
+This is not meant to be a terminal project. Use Drush/Terminus for that.
+
+It's still a work in progress, but here are some examples.
 
 ```
 from python import terminus
