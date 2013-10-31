@@ -1,5 +1,5 @@
-Pytheon
-=======
+Terminus Py
+===========
 
 This is a Python wrapper around the JSON API Pantheon exposes.
 
@@ -8,8 +8,8 @@ This is not meant to be a terminal project. Use Drush/Terminus for that.
 It's still a work in progress, but here are some examples.
 
 ```
-from python import terminus
-from python.site import Site
+from terminus import terminus
+from terminus.site import Site
 
 # Validate and create a session
 account = terminus.auth('mmilano@example.com', 'myawesomepassword')
