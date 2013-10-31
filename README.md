@@ -8,18 +8,12 @@ This is not meant to be a terminal project. Use Drush/Terminus for that.
 It's still a work in progress, but here are some examples.
 
 ```
-from terminus import terminus
-from terminus.site import Site
+from terminus.api import api
+from terminus.api import user
 
-# Validate and create a session
-account = terminus.auth('mmilano@example.com', 'myawesomepassword')
+session = api.auth('mikemilano@example.com', 'myawesomepassword')
 
-# Get a dict of sites (realm=user&path=sites)
-sites = account.sites()
-
-# Create a site api object (realm=site
-mysite = Site(account.session, site_uuid)
-
+sites = user.sites(session)
 ```
 
 ### MIT license
