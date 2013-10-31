@@ -2,20 +2,21 @@ Pantheon Terminus Python Library
 ================================
 
 This is largely a work in progress, but here is
-and example of the the usage I'm shooting for.
+an example of how it currently works.
 
 ```
+from python import terminus
+from python.site import Site
+
 # Validate and create a session
 account = terminus.auth('mmilano@example.com', 'myawesomepassword')
 
-# Get a dict of sites
+# Get a dict of sites (realm=user&path=sites)
 sites = account.sites()
 
-# Get a single site
-myawesomesite = account.sites('myawesomesite')
+# Create a site api object (realm=site
+mysite = Site(account.session, site_uuid)
 
-# Lock (add http password) to myawesomesite dev
-myawesomesite.lock('dev', 'myhttpusername', 'myhttppassword')
 ```
 
 ### MIT license
