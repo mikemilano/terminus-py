@@ -1,3 +1,4 @@
+import json
 import requests
 from bs4 import BeautifulSoup
 
@@ -5,7 +6,6 @@ BASE_URL = 'https://terminus.getpantheon.com'
 LURL = BASE_URL + '/login'
 TURL = BASE_URL + '/terminus.php'
 
-session = None
 
 def auth(email, password):
     """
@@ -16,13 +16,13 @@ def auth(email, password):
         password: account password
 
     Returns:
-        User
+        request.Session object
 
     Raises:
         Error: on invalid authentication
     """
     session = requests.Session()
-    response = session.get(LURL)
+    response = session.get(LURL, verify=False)
     soup = BeautifulSoup(response.text)
     form_build_id = ''
 
@@ -38,7 +38,7 @@ def auth(email, password):
         'form_id': 'atlas_login_form',
         'op': 'Login'
     }
-    response = session.post(LURL, data=payload, allow_redirects=False)
+    response = session.post(LURL, data=payload, allow_redirects=False, verify=False)
 
     setcookie = response.headers.get('set-cookie')
     valid_session = False
@@ -56,11 +56,43 @@ def auth(email, password):
     return session
 
 
+def request(session, payload, method='GET', data=None):
+    if method == 'GET':
+        return handle_response(session.get(TURL, params=payload))
+
+    session.headers.update({'Content-Type': 'application/json'})
+    data = json.dumps({'data': data})
+    methods = {
+        'POST': request_post,
+        'PUT': request_put,
+        'DELETE': request_delete
+    }
+    return handle_response(methods[method](session, payload, data))
+
+
+def request_post(session, payload, data):
+    return session.post(TURL, params=payload, data=data)
+
+
+def request_put(session, payload, data):
+    return session.put(TURL, params=payload, data=data)
+
+
+def request_delete(session, payload, data):
+    return session.delete(TURL, params=payload, data=data)
+
+
 def handle_response(response):
     """
     Handles response
+
+    Raises:
+        Error: on status codes other than 200
     """
     if response.status_code == 200:
-        return response.json()
+        try:
+            return response.json()
+        except:
+            return response.content
     else:
-        raise Exception('Dashboard unavailable')
+        raise Exception('Error')

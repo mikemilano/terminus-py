@@ -3,95 +3,86 @@ import api
 
 def info(session):
     payload = {'user': session.cookies.get('uuid'), 'path': ''}
-    response = session.get(api.TURL, params=payload)
-    return api.handle_response(response)
+    return api.request(session, payload)
 
 
 def profile(session, profile=None):
-    response = None
     if profile is None:
         payload = {'user': session.cookies.get('uuid'), 'path': 'profile'}
-        response = session.get(api.TURL, params=payload)
-
-    #TODO: Handle set profile
-    return api.handle_response(response)
-
-
-#def set_profile(session, profile):
-#    return None
-
-
-#def update_profile(session, profile):
-#    return None
+        return api.request(session, payload)
+    else:
+        payload = {'user': session.cookies.get('uuid'), 'path': 'profile'}
+        return api.request(session, payload, 'PUT', profile)
 
 
 def attribute(session, attribute, value=None):
-    response = None
     if value is None:
         payload = {'user': session.cookies.get('uuid'), 'path': 'profile/'+attribute}
-        response = session.get(api.TURL, params=payload)
-    #TODO: Handle set attribute
-    return api.handle_response(response)
-
-
-#def set_attribute(session, attribute):
-#    return None
+        return api.request(session, payload)
+    else:
+        payload = {'user': session.cookies.get('uuid'), 'path': 'profile/'+attribute}
+        return api.request(session, payload, 'PUT', value)
 
 
 def password(session, password):
-    return None
+    payload = {'user': session.cookies.get('uuid'), 'path': 'password'}
+    return api.request(session, payload, 'PUT', password)
 
 
 def email(session, email=None):
-    response = None
     if email is None:
         payload = {'user': session.cookies.get('uuid'), 'path': 'email'}
-        response = session.get(api.TURL, params=payload)
-    #TODO: Handle set email
-    return api.handle_response(response)
+        return api.request(session, payload)
+    else:
+        payload = {'user': session.cookies.get('uuid'), 'path': 'email'}
+        return api.request(session, payload, 'PUT', email)
 
 
-#def set_email(session, email):
-#    return None
+def uuid(session, email):
+    payload = {'user': session.cookies.get('uuid'), 'path': email+'/uuid'}
+    return api.request(session, payload)
 
 
-def get_uuid(session, email):
-    return None
-
-
-def get_email_by_email(session, email):
-    return None
+def check_email_by_email(session, email):
+    payload = {'user': session.cookies.get('uuid'), 'path': email+'/email'}
+    return api.request(session, payload)
 
 
 def delete(session):
-    return None
+    payload = {'user': session.cookies.get('uuid'), 'path': ''}
+    return api.request(session, payload, 'DELETE')
 
 
 def keys(session):
     payload = {'user': session.cookies.get('uuid'), 'path': 'keys'}
-    response = session.get(api.TURL, params=payload)
-    return api.handle_response(response)
+    return api.request(session, payload)
 
 
 def add_key(session, key):
-    return None
+    payload = {'user': session.cookies.get('uuid'), 'path': 'keys'}
+    return api.request(session, payload, 'POST', key)
+
+
+def delete_key(session, key):
+    payload = {'user': session.cookies.get('uuid'), 'path': 'keys/'+key}
+    return api.request(session, payload, 'DELETE')
 
 
 def delete_keys(session):
-    return None
+    payload = {'user': session.cookies.get('uuid'), 'path': 'keys'}
+    return api.request(session, payload, 'DELETE')
 
 
 def validate_key(session, key):
-    return None
+    payload = {'user': session.cookies.get('uuid'), 'path': 'keys?validate=true'}
+    return api.request(session, payload, 'POST', key)
 
 
 def sites(session):
     payload = {'user': session.cookies.get('uuid'), 'path': 'sites'}
-    response = session.get(api.TURL, params=payload)
-    return api.handle_response(response)
+    return api.request(session, payload)
 
 
 def owned_sites(session):
     payload = {'user': session.cookies.get('uuid'), 'path': 'sites?owned=1'}
-    response = session.get(api.TURL, params=payload)
-    return api.handle_response(response)
+    return api.request(session, payload)
