@@ -7,13 +7,13 @@ def info(session):
     return api.request(session, payload)
 
 
-def profile(session, profile=None):
-    if profile is None:
+def profile(session, values=None):
+    if values is None:
         payload = {'user': session.cookies.get('uuid'), 'path': 'profile'}
         return api.request(session, payload)
     else:
         payload = {'user': session.cookies.get('uuid'), 'path': 'profile'}
-        return api.request(session, payload, 'PUT', profile)
+        return api.request(session, payload, 'PUT', values)
 
 
 def attribute(session, attribute, value=None):
