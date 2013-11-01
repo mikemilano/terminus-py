@@ -1,4 +1,5 @@
 import api
+import urllib
 
 
 def info(session):
@@ -39,12 +40,12 @@ def email(session, email=None):
 
 
 def uuid(session, email):
-    payload = {'user': session.cookies.get('uuid'), 'path': email+'/uuid'}
+    payload = {'user': session.cookies.get('uuid'), 'path': urllib.quote(email)+'/uuid'}
     return api.request(session, payload)
 
 
 def check_email_by_email(session, email):
-    payload = {'user': session.cookies.get('uuid'), 'path': email+'/email'}
+    payload = {'user': session.cookies.get('uuid'), 'path': urllib.quote(email)+'/email'}
     return api.request(session, payload)
 
 
