@@ -26,7 +26,7 @@ def clone_files(session, uuid, source, target):
 
 def clone_code(session, uuid, environment, updatedb=False):
     """
-    API Function to deploy code to a site environment
+    API call to deploy code to a site environment
     """
     payload = {'site': uuid, 'path': 'environments/'+environment+'/code'}
     data = {
@@ -37,7 +37,7 @@ def clone_code(session, uuid, environment, updatedb=False):
 
 def wipe(session, uuid, environment):
     """
-    API Function to Wipe an Environment
+    API call to wipe an environment
     """
     payload = {'site': uuid, 'path': 'environments/'+environment+'/wipe'}
     return api.request(session, payload, 'POST')

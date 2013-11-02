@@ -8,8 +8,7 @@ This is not meant to be a terminal project. Use Drush/Terminus for that.
 It's still a work in progress, but here are some examples.
 
 ```
-from terminus.api import api
-from terminus.api import user
+from terminus.api import api, user
 
 session = api.auth('mikemilano@example.com', 'myawesomepassword')
 

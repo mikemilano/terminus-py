@@ -23,7 +23,7 @@ def download_url(session, uuid, environment, bucket, element):
 
 def backup(session, uuid, environment, entry_type, code=True, db=True, files=True):
     """
-    API Function to make a backup
+    API call to make a backup
     """
     payload = {'site': uuid, 'path': 'environments/'+environment+'/backups/create'}
     data = {
