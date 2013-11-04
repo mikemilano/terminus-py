@@ -46,7 +46,7 @@ info = my_awesome_site.info()
 # or if the environment should just be passed into the environment methods.
 
 # So either
-my_awesome_site['dev'].lock('admin', 'password')
+my_awesome_site.environments['dev'].lock('admin', 'password')
 
 # OR
 my_awesome_site.lock('dev', 'admin', 'password')
