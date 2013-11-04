@@ -18,6 +18,41 @@ sites = user.sites(session)
 
 Take a look at terminus/api/* for all available methods.
 
+### Roadmap
+
+The plan is to add classes which are more abstracted from the API.
+
+The goal would be to use the library like this:
+
+```
+# Note, the level higher than api here
+from terminus import user, site
+
+user = User('mikemilano@example.com', 'myawesomepassword')
+
+# Access a site
+my_awesome_site = user.sites('my_awesome_site')
+
+# OR
+all_sites = user.sites()
+my_awesome_site = all_sites['my_awesome_site']
+
+# Site level methods
+# Get site info
+info = my_awesome_site.info()
+
+# Environment level methods:
+# Not sure if environments should be an array of environment objects
+# or if the environment should just be passed into the environment methods.
+
+# So either
+my_awesome_site['dev'].lock('admin', 'password')
+
+# OR
+my_awesome_site.lock('dev', 'admin', 'password')
+```
+
+
 ### MIT license
 
 Copyright (c) 2013 Mike Milano.
