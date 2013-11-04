@@ -3,17 +3,20 @@ Terminus Py
 
 This is a Python wrapper around the JSON API Pantheon exposes.
 
-This is not meant to be a terminal project. Use Drush/Terminus for that.
+This is not meant to be a console app yet. Use Drush/Terminus for that.
 
-It's still a work in progress, but here are some examples.
+Currently it manages the login session and wraps the Terminus API.
+
+This example generates a session and retrieves the user's sites.
 
 ```
 from terminus.api import api, user
 
 session = api.auth('mikemilano@example.com', 'myawesomepassword')
-
 sites = user.sites(session)
 ```
+
+Take a look at terminus/api/* for all available methods.
 
 ### MIT license
 
