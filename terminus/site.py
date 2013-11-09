@@ -1,4 +1,4 @@
-from api import api
+from environment import Environment
 
 
 class Site:
@@ -29,7 +29,7 @@ class Site:
         # Additional site properties available in: api.site.state()
         self.settings = None
         self.base_domain = None
-        self.environments = None
+        self.environments = {}
         self.instrument = {
             'billing_hash': None,
             'subscription_uuid': None,
@@ -47,6 +47,7 @@ class Site:
         # Set properties
         self.session = session
         self.base_keys = ['site', 'information']
+
         if properties is not None:
             self.set_properties(properties)
 
@@ -56,6 +57,14 @@ class Site:
         If pre-defined key names (site, information) hold nested property data,
         then values within those dicts will be set accordingly.
         """
+        # Setup environments
+        if 'environments' in properties:
+            for name, env_properties in properties['environments'].iteritems():
+                env_properties['name'] = name
+                self.environments[name] = Environment(self.session, env_properties)
+            properties.pop('environments', None)
+
+        # Populate the rest of the properties
         for key, value in properties.iteritems():
             key = key.replace('-', '_')
             if hasattr(self, key):

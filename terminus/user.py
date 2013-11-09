@@ -1,5 +1,5 @@
-import api
-
+from api import api, \
+    user as userapi
 
 class User:
     """
@@ -12,9 +12,8 @@ class User:
         Args:
             session: requests.Session object for making API requests
             uuid: User's uuid
-            kwargs: data from the API
         """
-        # Define properties
+        # Define attributes
         self.profile = {
             'firstname': None,
             'lastname': None,
@@ -26,9 +25,10 @@ class User:
             'devsites': None,
             'organization': None
         }
+        self.uuid = None
+        self.email = None
         self.added = None
         self.organizations = None
-        self.email = None
         self.metadata = None
         # Set properties
         self.session = session
@@ -44,19 +44,43 @@ class User:
             if hasattr(self, key):
                 setattr(self, key, value)
 
+    def load(self):
+        """
+        Loads user attributes from the API into this user object
+        """
+        self.set_properties(userapi.info(self.session))
 
-class Profile:
-    def __init__(self):
-        self.firstname = None
-        self.created = None
-        self.lastname = None
-        self.invited_by = None
-        self.modified = None
-        self.invited_to = None
-        self.activity_level = None
-        self.dashboard_visits = []
-        self.maxdevsites = None
-        self.verify = None
-        self.organization = None
-        self.screen_intro_multidev_module = None
+    def attr(self, attribute, value=None):
+        """
+        Gets/sets profile attribute using the API.
+        """
+        if attribute in self.profile:
+            if value is None:
+                # Retrieve the value from the API and set local value based on the response
+                try:
+                    response = userapi.attribute(self.session, attribute, value)
+                    self.profile[attribute] = response
+                except ValueError:
+                    return False
+            else:
+                # Set the value with the API and set the local value with a successful return
+                try:
+                    response = userapi.attribute(self.session, attribute, value)
+                    if response.startswith('Set profile field'):
+                        self.profile[attribute] = value
+                        return True
+                except ValueError:
+                    return False
 
+    def password(self, value):
+        """
+        Sets password and returns True upson success
+        """
+        try:
+            response = userapi.password(self.session, value)
+            if response.startswith('Set password for user'):
+                return True
+            else:
+                return False
+        except ValueError:
+            return False

@@ -1,4 +1,3 @@
-from api import api
 
 
 class Environment:

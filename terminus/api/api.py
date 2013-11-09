@@ -92,7 +92,7 @@ def handle_response(response):
     if response.status_code == 200:
         try:
             return response.json()
-        except:
+        except ValueError:
             return response.content
     else:
-        raise Exception('Error')
+        raise Exception('ValueError')

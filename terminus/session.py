@@ -1,5 +1,6 @@
 from api import api, \
-    user as userapi
+    user as userapi, \
+    site as siteapi
 from user import User
 from site import Site
 
@@ -47,8 +48,13 @@ class Session:
         """
         sites = userapi.sites(self.session)
         self.sites = {}
+        self.sitemap = {}
+
+
+
         for uuid, properties in sites.iteritems():
+            properties = siteapi.state(self.session, uuid)
             properties['uuid'] = uuid
-            name = properties['information']['name']
-            self.sites[name] = Site(properties)
+            name = properties['site']['name']
+            self.sites[name] = Site(self.session, properties)
             self.sitemap[uuid] = name
