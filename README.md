@@ -5,13 +5,40 @@ This is a Python wrapper around the JSON API Pantheon exposes.
 
 This is not meant to be a console app yet. Use Drush/Terminus for that.
 
-Currently it manages the login session and wraps the Terminus API.
+## Usage
+```
+from terminus.session import Session
+s = Session('mikemilano@example.com', 'myawesomepassword')
 
-This example generates a session and retrieves the user's sites.
+# s.user is a terminus.user object for the authenticated user
+#
+# Example: set password
+s.user.set_password('mynewpassword')
 
+# The site class is incomplete, but here is some information:
+#
+# s.sites is a dict of terminus.site objects, keyed by site name
+#
+# Example: Set service level
+s.sites['myawesomesite'].set_service_level('basic')
+
+# The environments class is incomplete
+#
+# s.sites['myawesomesite'].environments is a dict of terminus.environment
+# objects keyed by environment name. (dev, test, live, and multidev names)
+#
+# Example: Lock environment
+s.sites['myawesomesite'].environments['dev'].lock('admin', 'secretpassword')
+```
+
+### API usage for terminus.api modules
+
+The API modules are what the higher level classes use to communicate
+to the API. You can use these directly as well.
 ```
 from terminus.api import api, user
 
+# Set 'sites' to a dict of user sites, as returned by the API
 session = api.auth('mikemilano@example.com', 'myawesomepassword')
 sites = user.sites(session)
 ```
@@ -20,37 +47,8 @@ Take a look at terminus/api/* for all available methods.
 
 ### Roadmap
 
-The plan is to add classes which are more abstracted from the API.
-
-The goal would be to use the library like this:
-
-```
-# Note, the level higher than api here
-from terminus import user, site
-
-user = User('mikemilano@example.com', 'myawesomepassword')
-
-# Access a site
-my_awesome_site = user.sites('my_awesome_site')
-
-# OR
-all_sites = user.sites()
-my_awesome_site = all_sites['my_awesome_site']
-
-# Site level methods
-# Get site info
-info = my_awesome_site.info()
-
-# Environment level methods:
-# Not sure if environments should be an array of environment objects
-# or if the environment should just be passed into the environment methods.
-
-# So either
-my_awesome_site.environments['dev'].lock('admin', 'password')
-
-# OR
-my_awesome_site.lock('dev', 'admin', 'password')
-```
+The plan is to finish out the higher level classes
+which are more abstracted from the API.
 
 
 ### MIT license
