@@ -50,11 +50,9 @@ class Session:
         self.sites = {}
         self.sitemap = {}
 
-
-
         for uuid, properties in sites.iteritems():
-            properties = siteapi.state(self.session, uuid)
-            properties['uuid'] = uuid
-            name = properties['site']['name']
-            self.sites[name] = Site(self.session, properties)
+            settings = siteapi.settings(self.session, uuid)
+            settings['uuid'] = uuid
+            name = settings['name']
+            self.sites[name] = Site(self.session, settings)
             self.sitemap[uuid] = name

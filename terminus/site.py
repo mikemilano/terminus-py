@@ -1,4 +1,5 @@
 from environment import Environment
+from api import site as siteapi
 
 
 class Site:
@@ -53,10 +54,15 @@ class Site:
 
     def set_properties(self, properties):
         """
-        Sets valid properties from dict.
+        Sets valid properties from dict. This data is returned from
+        various site API calls such as: info, settings, & state.
+
         If pre-defined key names (site, information) hold nested property data,
         then values within those dicts will be set accordingly.
         """
+        if properties is None:
+            return
+
         # Setup environments
         if 'environments' in properties:
             for name, env_properties in properties['environments'].iteritems():
@@ -71,3 +77,42 @@ class Site:
                 setattr(self, key, value)
             if key in self.base_keys:
                 self.set_properties(value)
+
+    def load_info(self):
+        """
+        Loads and returns site info data from API
+        """
+        response = siteapi.info(self.session, self.uuid)
+        self.set_properties(response)
+        return response
+
+    def load_state(self):
+        """
+        Loads and returns state data from API
+        """
+        response = siteapi.state(self.session, self.uuid)
+        self.set_properties(response)
+        return response
+
+    def delete(self):
+        """
+        Deletes the site
+        """
+        siteapi.delete(self.session)
+
+    def settings(self):
+        """"
+        Loads and returns settings data from API
+        """
+        response = siteapi.settings(self.session, self.uuid)
+        self.set_properties(response)
+        return response
+
+    def service_level(self, level=None):
+        """
+        Loads and returns service level if level is not set.
+        If the level argument is passed in, it is set.
+        """
+        response = siteapi.settings(self.session, self.uuid, level)
+        self.service_level = response
+        return response

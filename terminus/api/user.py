@@ -60,7 +60,7 @@ def uuid(session, email):
     """
     API call to get a user's uuid
     """
-    payload = {'user': session.cookies.get('uuid'), 'path': urllib.quote(email)+'/uuid'}
+    payload = {'user': session.cookies.get('uuid'), 'path': 'uuid/'+urllib.quote(email)}
     return api.request(session, payload)
 
 
