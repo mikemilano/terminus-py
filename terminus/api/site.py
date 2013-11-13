@@ -107,12 +107,12 @@ def delete_team_member(session, uuid, user_uuid):
     return api.request(session, payload, 'DELETE')
 
 
-def invite_team_member(session, uuid, email, invited_by):
+def invite_team_member(session, uuid, email):
     """
     API call to invite a user to Pantheon and add to site team
     """
     payload = {'site': uuid, 'path': 'team/'+urllib.quote(email)}
-    data = {'invited_by': invited_by}
+    data = {'invited_by': session.cookies.get('uuid')}
     return api.request(session, payload, 'POST', data)
 
 
@@ -124,12 +124,16 @@ def owner(session, uuid):
     return api.request(session, payload)
 
 
-def notifications(session, uuid):
+def notifications(session, uuid, key=None, data=None):
     """
     API call to get notifications for a site to track job status
     """
-    payload = {'site': uuid, 'path': 'notifications'}
-    return api.request(session, payload)
+    if key is None or data is None:
+        payload = {'site': uuid, 'path': 'notifications'}
+        return api.request(session, payload)
+    else:
+        payload = {'site': uuid, 'path': 'notifications/'+urllib.quote(key)}
+        return api.request(session, payload, 'PUT', data)
 
 
 def screenshot(session, uuid):
